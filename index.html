@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+<script>
+// prévia no Claude: este visualizador não serve arquivos .glb, então os modelos vêm em texto base64
+(() => {
+  const f0 = window.fetch.bind(window);
+  window.fetch = async (input, init) => {
+    const url = typeof input === 'string' ? input : input.url;
+    if (/\.glb(\?|$)/.test(url)) {
+      const t = await (await f0(url.replace(/\.glb/, '.b64.txt'))).text();
+      const bin = Uint8Array.from(atob(t.trim()), c => c.charCodeAt(0));
+      return new Response(bin, {status: 200, headers: {'Content-Type': 'model/gltf-binary'}});
+    }
+    return f0(input, init);
+  };
+})();
+</script>
+
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Garra Pega-Pega do braço hidráulico A-81 em 3D e realidade aumentada.">
 <meta name="theme-color" content="#5c3a22">
 <title>Garra Pega-Pega · RA</title>
+  <script type="module" crossorigin src="./assets/index-D2y7KT2R.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CasA1_Ev.css">
 </head>
 <body>
 <header class="band"><div class="wrap">
   <p class="course">Projeto e Desenvolvimento de Produtos · DEP / ICTE / UFTM</p>
   <h1>Garra Pega-Pega</h1>
-  <p class="sub">O braço hidráulico A-81 com a garra nova de 4 dedos, redesenhada para seringas de 10 ml. Veja o braço inteiro levar a palavra IGOR de um lugar a outro, gire, aproxime e coloque o modelo em tamanho real na sua mesa.</p>
+  <p class="sub">O braço hidráulico A-81 com a garra nova de 4 dedos, redesenhada para seringas de 10 ml. Veja o braço inteiro levar um tijolo escrito IGOR de um lugar a outro, gire, aproxime e coloque o modelo em tamanho real na sua mesa.</p>
 </div></header>
 
 <section class="band" style="padding-top:0"><div class="wrap stage">
@@ -39,7 +58,7 @@
   </div>
   <aside class="panel">
     <div class="ctl">
-      <label for="abre" id="ctlLbl">Levar a palavra de A até B</label>
+      <label for="abre" id="ctlLbl">Levar o tijolo de A até B</label>
       <input type="range" id="abre" min="0" max="100" value="0" aria-describedby="abreTxt">
       <div class="ends" id="ends"><span>A</span><span>B e de volta a A</span></div>
       <p class="read" id="abreTxt">Pronto, acima da posição A <small>garra vazia</small></p>
@@ -63,11 +82,11 @@
 </div></section>
 
 <section class="band" style="padding-top:0"><div class="wrap">
-  <h2>Como o braço leva a palavra</h2>
+  <h2>Como o braço leva o tijolo</h2>
   <ol class="steps">
-    <li><b>Ombro e cotovelo</b>Duas seringas mestras empurram ou puxam água nas seringas da torre e da lança: a lança gira no ombro e o antebraço no cotovelo, para descer até a palavra e levantá-la.</li>
-    <li><b>Garra</b>A quarta mestra fecha a garra até as pontas dos dedos encostarem nas pontas da palavra IGOR (64 mm) e abre para soltar.</li>
-    <li><b>Base</b>A primeira mestra move a seringa deitada na base, que empurra a alavanca do disco: o braço gira 60° (30° para cada lado) e leva a palavra da posição A até a B, a quase 9 cm de distância. Depois faz o caminho de volta.</li>
+    <li><b>Ombro e cotovelo</b>Duas seringas mestras empurram ou puxam água nas seringas da torre e da lança: a lança gira no ombro e o antebraço no cotovelo, para descer até o tijolo, levantá-lo e esticar o braço para frente durante o transporte.</li>
+    <li><b>Garra</b>A quarta mestra fecha os 4 dedos em volta do tijolinho IGOR em pé (22 × 22 × 26 mm) e abre para soltar.</li>
+    <li><b>Base</b>A primeira mestra move a seringa deitada na base, que empurra a alavanca do disco: o braço gira 64° (32° para cada lado) e leva o tijolo da posição A até a B, a cerca de 10 cm de distância. Depois faz o caminho de volta.</li>
   </ol>
 </div></section>
 
@@ -78,7 +97,7 @@
       <li>A seringa mestra e a seringa da garra estão ligadas por uma mangueira cheia de água.</li>
       <li>Puxando o êmbolo da mestra, o êmbolo da garra sobe e traz o bloco de baixo até 15 mm para perto do bloco de cima (≈ 2,5 ml de água). Empurrando, o bloco desce e a garra abre.</li>
       <li>Cada dedo gira no seu pino do bloco de baixo, preso ao bloco de cima pelo bracinho e pelos encaixes.</li>
-      <li>As pontas vão de cerca de 90 mm (aberta) até se tocarem (fechada). Na vista “Só a garra” ela desce, fecha nas pontas da palavra IGOR (64 mm), levanta, desce e solta: arraste a barra para ver cada momento.</li>
+      <li>As pontas vão de cerca de 90 mm (aberta) até se tocarem (fechada). Na vista “Só a garra” ela desce, fecha os 4 dedos em volta do tijolinho IGOR, levanta, desce e solta: arraste a barra para ver cada momento.</li>
     </ol>
   </div>
 </div></section>
@@ -87,6 +106,5 @@
   <p>Garra: contornos exatos dos arquivos de corte do grupo (MDF 5 mm). Braço A-81: medidas estimadas pelo simulador da disciplina, usando a engrenagem de Ø40 mm como referência. Modelo 3D com animação de abre e fecha.</p>
 </div></footer>
 
-<script type="module" src="/src/main.js"></script>
 </body>
 </html>

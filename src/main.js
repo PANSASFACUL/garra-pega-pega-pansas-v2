@@ -9,7 +9,7 @@ import './style.css';
 import HG from './hot_grab.json';
 import ARM from './arm_timeline.json';
 
-// HG: linha do tempo da garra pegando a palavra IGOR (posições dos números das peças, fase e abertura)
+// HG: linha do tempo da garra pegando o tijolo IGOR (posições dos números das peças, fase e abertura)
 const mv = document.getElementById('mv');
 const viewer = document.getElementById('viewer');
 const tB = document.getElementById('t-braco'), tG = document.getElementById('t-garra');
@@ -32,7 +32,7 @@ const applyState = s => {
   if (view === 'garra') {
     const S = HG.s, x = s * (S.length - 1), i = Math.min(S.length - 2, Math.floor(x)), f = x - i, A = S[i], B = S[i + 1];
     const ab = Math.round(lerp(A.ab, B.ab, f));
-    const pega = ['Levantando a palavra', 'Segurando no alto', 'Descendo com a palavra'].includes(A.f) ? 'palavra presa entre os dedos' : ab + ' mm entre as pontas';
+    const pega = ['Levantando o tijolo', 'Segurando no alto', 'Descendo com o tijolo'].includes(A.f) ? 'tijolo preso entre os dedos' : ab + ' mm entre as pontas';
     abreTxt.innerHTML = A.f + ' <small>' + pega + '</small>';
     for (let n = 1; n <= 10; n++) {
       const a = A['n' + n], b = B['n' + n];
@@ -43,11 +43,11 @@ const applyState = s => {
     let fase = ARM.fases[0][1];
     for (const [t0, nome] of ARM.fases) if (t >= t0) fase = nome;
     const presa = ARM.carry.some(([a, b]) => t > a && t < b);
-    abreTxt.innerHTML = fase + ' <small>' + (presa ? 'palavra presa na garra' : 'garra vazia') + '</small>';
+    abreTxt.innerHTML = fase + ' <small>' + (presa ? 'tijolo preso na garra' : 'garra vazia') + '</small>';
   }
 };
 const setManual = s => {
-  auto = false; cancelAnimationFrame(raf); playBtn.textContent = view === 'garra' ? 'Pegar a palavra sozinha' : 'Mover o braço sozinho';
+  auto = false; cancelAnimationFrame(raf); playBtn.textContent = view === 'garra' ? 'Pegar o tijolo sozinha' : 'Mover o braço sozinho';
   mv.pause(); mv.currentTime = s * dur(); applyState(s);
 };
 const follow = () => {
@@ -85,7 +85,7 @@ const setView = v => {
   mv.cameraOrbit = v === 'braco' ? '-25deg 70deg auto' : '20deg 75deg auto';
   mv.cameraTarget = 'auto auto auto';
   viewer.classList.toggle('show-hot', v === 'garra' && showNums);
-  ctlLbl.textContent = v === 'garra' ? 'Pegar a palavra IGOR' : 'Levar a palavra de A até B';
+  ctlLbl.textContent = v === 'garra' ? 'Pegar o tijolo IGOR' : 'Levar o tijolo de A até B';
   ends.innerHTML = v === 'garra' ? '<span>início</span><span>fim</span>' : '<span>A</span><span>B e de volta a A</span>';
   auto = false; cancelAnimationFrame(raf); slider.value = 0;
 };

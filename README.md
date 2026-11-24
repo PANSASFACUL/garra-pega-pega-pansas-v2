@@ -1,6 +1,6 @@
 # Garra Pega-Pega · realidade aumentada
 
-Site em **Vite** com o braço hidráulico A-81 e a garra Pega-Pega em 3D: a garra pega a palavra IGOR, as peças são numeradas, e o botão "Ver em realidade aumentada" põe o modelo na mesa pelo celular.
+Site em **Vite** com o braço hidráulico A-81 e a garra Pega-Pega em 3D: o braço pega um tijolinho escrito IGOR e o leva de A até B, as peças são numeradas, e o botão "Ver em realidade aumentada" põe o modelo na mesa pelo celular.
 
 ## Rodar no computador
 
