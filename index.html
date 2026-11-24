@@ -11,20 +11,20 @@
 <header class="band"><div class="wrap">
   <p class="course">Projeto e Desenvolvimento de Produtos · DEP / ICTE / UFTM</p>
   <h1>Garra Pega-Pega</h1>
-  <p class="sub">O braço hidráulico A-81 com a garra nova de 4 dedos, redesenhada para seringas de 10 ml. Veja a garra pegar a palavra IGOR, gire, aproxime e coloque o modelo em tamanho real na sua mesa.</p>
+  <p class="sub">O braço hidráulico A-81 com a garra nova de 4 dedos, redesenhada para seringas de 10 ml. Veja o braço inteiro levar a palavra IGOR de um lugar a outro, gire, aproxime e coloque o modelo em tamanho real na sua mesa.</p>
 </div></header>
 
 <section class="band" style="padding-top:0"><div class="wrap stage">
-  <div class="viewer show-hot" id="viewer">
+  <div class="viewer" id="viewer">
     <div class="tabs" role="group" aria-label="Modelo">
-      <button class="tab" id="t-garra" aria-pressed="true">Só a garra</button>
-      <button class="tab" id="t-braco" aria-pressed="false">Braço completo</button>
+      <button class="tab" id="t-braco" aria-pressed="true">Braço completo</button>
+      <button class="tab" id="t-garra" aria-pressed="false">Só a garra</button>
     </div>
-    <model-viewer id="mv" src="models/garra.glb" ios-src="models/garra.usdz" poster="img/poster_garra.webp"
+    <model-viewer id="mv" src="models/braco.glb" ios-src="models/braco.usdz" poster="img/poster_braco.webp"
       alt="Braço hidráulico de MDF com a garra Pega-Pega de 4 dedos abrindo e fechando"
       ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" camera-controls touch-action="pan-y"
       animation-name="Scene" shadow-intensity="1" shadow-softness="0.8" exposure="1.05"
-      camera-orbit="20deg 75deg auto" interaction-prompt="none">
+      camera-orbit="-25deg 70deg auto" interaction-prompt="none">
             <button class="hot" slot="hotspot-n1" data-n="1" data-position="0.0749 0.05 -0.0" aria-label="Peça 1">1</button>
       <button class="hot" slot="hotspot-n2" data-n="2" data-position="0.0 0.1021 -0.0311" aria-label="Peça 2">2</button>
       <button class="hot" slot="hotspot-n3" data-n="3" data-position="-0.0407 0.07 0.0075" aria-label="Peça 3">3</button>
@@ -39,14 +39,14 @@
   </div>
   <aside class="panel">
     <div class="ctl">
-      <label for="abre" id="ctlLbl">Pegar a palavra IGOR</label>
+      <label for="abre" id="ctlLbl">Levar a palavra de A até B</label>
       <input type="range" id="abre" min="0" max="100" value="0" aria-describedby="abreTxt">
-      <div class="ends" id="ends"><span>início</span><span>fim</span></div>
-      <p class="read" id="abreTxt">Aberta, sobre a palavra <small>115 mm entre as pontas</small></p>
+      <div class="ends" id="ends"><span>A</span><span>B e de volta a A</span></div>
+      <p class="read" id="abreTxt">Pronto, acima da posição A <small>garra vazia</small></p>
     </div>
     <button class="btn ar" id="arBtn">Ver em realidade aumentada</button>
     <p class="msg" id="arMsg"></p>
-    <button class="btn ghost" id="playBtn">Pegar a palavra sozinha</button>
+    <button class="btn ghost" id="playBtn">Mover o braço sozinho</button>
     <ol class="legend" id="legend" aria-label="Peças numeradas"></ol>
     <button class="btn ghost" id="numBtn">Esconder números</button>
     <div id="qr"><div id="qrBox"></div><span>Aponte a câmera do celular para abrir este modelo em RA.</span></div>
@@ -63,13 +63,22 @@
 </div></section>
 
 <section class="band" style="padding-top:0"><div class="wrap">
+  <h2>Como o braço leva a palavra</h2>
+  <ol class="steps">
+    <li><b>Ombro e cotovelo</b>Duas seringas mestras empurram ou puxam água nas seringas da torre e da lança: a lança gira no ombro e o antebraço no cotovelo, para descer até a palavra e levantá-la.</li>
+    <li><b>Garra</b>A quarta mestra fecha a garra até as pontas dos dedos encostarem nas pontas da palavra IGOR (64 mm) e abre para soltar.</li>
+    <li><b>Base</b>A primeira mestra move a seringa deitada na base, que empurra a alavanca do disco: o braço gira 60° (30° para cada lado) e leva a palavra da posição A até a B, a quase 9 cm de distância. Depois faz o caminho de volta.</li>
+  </ol>
+</div></section>
+
+<section class="band" style="padding-top:0"><div class="wrap">
   <div>
     <h2>Como a garra fecha</h2>
     <ol>
       <li>A seringa mestra e a seringa da garra estão ligadas por uma mangueira cheia de água.</li>
       <li>Puxando o êmbolo da mestra, o êmbolo da garra sobe e traz o bloco de baixo até 15 mm para perto do bloco de cima (≈ 2,5 ml de água). Empurrando, o bloco desce e a garra abre.</li>
       <li>Cada dedo gira no seu pino do bloco de baixo, preso ao bloco de cima pelo bracinho e pelos encaixes.</li>
-      <li>As pontas vão de 115 mm (aberta) a 15 mm (fechada). Na vista “Só a garra” ela desce, fecha nas pontas da palavra IGOR (64 mm), levanta, desce e solta: arraste a barra para ver cada momento.</li>
+      <li>As pontas vão de cerca de 90 mm (aberta) até se tocarem (fechada). Na vista “Só a garra” ela desce, fecha nas pontas da palavra IGOR (64 mm), levanta, desce e solta: arraste a barra para ver cada momento.</li>
     </ol>
   </div>
 </div></section>

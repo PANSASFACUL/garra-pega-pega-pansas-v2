@@ -7,6 +7,7 @@ import '@fontsource/barlow-condensed/600.css';
 import '@fontsource/barlow-condensed/700.css';
 import './style.css';
 import HG from './hot_grab.json';
+import ARM from './arm_timeline.json';
 
 // HG: linha do tempo da garra pegando a palavra IGOR (posições dos números das peças, fase e abertura)
 const mv = document.getElementById('mv');
@@ -23,10 +24,10 @@ const legend = document.getElementById('legend');
 legend.innerHTML = PECAS.map(p => `<li><button data-n="${p[0]}"><b>${p[0]}</b><span>${p[1]}</span><em>× ${p[2]}</em></button></li>`).join('');
 const slider = document.getElementById('abre'), abreTxt = document.getElementById('abreTxt');
 const numBtn = document.getElementById('numBtn');
-let view = 'garra', showNums = true, auto = false, raf = 0;
+let view = 'braco', showNums = true, auto = false, raf = 0;
 const lerp = (a, b, t) => a + (b - a) * t;
 const ends = document.getElementById('ends'), ctlLbl = document.getElementById('ctlLbl');
-const dur = () => view === 'garra' ? HG.T : 2.0;      // garra: linha do tempo inteira; braço: abrir -> fechar
+const dur = () => view === 'garra' ? HG.T : ARM.T;    // duração da animação de cada vista (s)
 const applyState = s => {
   if (view === 'garra') {
     const S = HG.s, x = s * (S.length - 1), i = Math.min(S.length - 2, Math.floor(x)), f = x - i, A = S[i], B = S[i + 1];
@@ -38,19 +39,22 @@ const applyState = s => {
       mv.updateHotspot({name: 'hotspot-n' + n, position: `${lerp(a[0], b[0], f)}m ${lerp(a[1], b[1], f)}m ${lerp(a[2], b[2], f)}m`});
     }
   } else {
-    const L = HG.abb, x = s * (L.length - 1), i = Math.min(L.length - 2, Math.floor(x));
-    abreTxt.innerHTML = Math.round(lerp(L[i], L[i + 1], x - i)) + ' <small>mm entre as pontas</small>';
+    const t = s * ARM.T;
+    let fase = ARM.fases[0][1];
+    for (const [t0, nome] of ARM.fases) if (t >= t0) fase = nome;
+    const presa = ARM.carry.some(([a, b]) => t > a && t < b);
+    abreTxt.innerHTML = fase + ' <small>' + (presa ? 'palavra presa na garra' : 'garra vazia') + '</small>';
   }
 };
 const setManual = s => {
-  auto = false; cancelAnimationFrame(raf); playBtn.textContent = view === 'garra' ? 'Pegar a palavra sozinha' : 'Abrir e fechar sozinha';
+  auto = false; cancelAnimationFrame(raf); playBtn.textContent = view === 'garra' ? 'Pegar a palavra sozinha' : 'Mover o braço sozinho';
   mv.pause(); mv.currentTime = s * dur(); applyState(s);
 };
 const follow = () => {
   if (!auto) return;
   let s;
   if (view === 'garra') s = (mv.currentTime % HG.T) / HG.T;
-  else { const t = mv.currentTime % 4; s = t <= 2 ? t / 2 : 2 - t / 2; }
+  else s = (mv.currentTime % ARM.T) / ARM.T;
   slider.value = Math.round(s * 100); applyState(s);
   raf = requestAnimationFrame(follow);
 };
@@ -78,15 +82,16 @@ const setView = v => {
   view = v;
   tB.setAttribute('aria-pressed', v === 'braco'); tG.setAttribute('aria-pressed', v === 'garra');
   mv.src = `models/${v}.glb`; mv.iosSrc = `models/${v}.usdz`; mv.poster = `img/poster_${v}.webp`;
-  mv.cameraOrbit = v === 'braco' ? '35deg 72deg auto' : '20deg 75deg auto';
+  mv.cameraOrbit = v === 'braco' ? '-25deg 70deg auto' : '20deg 75deg auto';
   mv.cameraTarget = 'auto auto auto';
   viewer.classList.toggle('show-hot', v === 'garra' && showNums);
-  ctlLbl.textContent = v === 'garra' ? 'Pegar a palavra IGOR' : 'Mexa a garra';
-  ends.innerHTML = v === 'garra' ? '<span>início</span><span>fim</span>' : '<span>aberta</span><span>fechada</span>';
+  ctlLbl.textContent = v === 'garra' ? 'Pegar a palavra IGOR' : 'Levar a palavra de A até B';
+  ends.innerHTML = v === 'garra' ? '<span>início</span><span>fim</span>' : '<span>A</span><span>B e de volta a A</span>';
   auto = false; cancelAnimationFrame(raf); slider.value = 0;
 };
 tB.addEventListener('click', () => setView('braco'));
 tG.addEventListener('click', () => setView('garra'));
+setView(view);
 mv.addEventListener('load', () => { if (auto) mv.play(); else setManual(slider.value / 100); });
 arBtn.addEventListener('click', async () => {
   if (mv.canActivateAR) {
