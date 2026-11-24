@@ -1,30 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<script>
-// prévia no Claude: este visualizador não serve arquivos .glb, então os modelos vêm em texto base64
-(() => {
-  const f0 = window.fetch.bind(window);
-  window.fetch = async (input, init) => {
-    const url = typeof input === 'string' ? input : input.url;
-    if (/\.glb(\?|$)/.test(url)) {
-      const t = await (await f0(url.replace(/\.glb/, '.b64.txt'))).text();
-      const bin = Uint8Array.from(atob(t.trim()), c => c.charCodeAt(0));
-      return new Response(bin, {status: 200, headers: {'Content-Type': 'model/gltf-binary'}});
-    }
-    return f0(input, init);
-  };
-})();
-</script>
-
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Garra Pega-Pega do braço hidráulico A-81 em 3D e realidade aumentada.">
 <meta name="theme-color" content="#5c3a22">
 <title>Garra Pega-Pega · RA</title>
-  <script type="module" crossorigin src="./assets/index-dv3A4qvh.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CasA1_Ev.css">
 </head>
 <body>
 <header class="band"><div class="wrap">
@@ -106,5 +87,6 @@
   <p>Garra: contornos exatos dos arquivos de corte do grupo (MDF 5 mm). Braço A-81: medidas estimadas pelo simulador da disciplina, usando a engrenagem de Ø40 mm como referência. Modelo 3D com animação de abre e fecha.</p>
 </div></footer>
 
+<script type="module" src="/src/main.js"></script>
 </body>
 </html>
