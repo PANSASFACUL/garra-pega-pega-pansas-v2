@@ -24,6 +24,8 @@ const legend = document.getElementById('legend');
 legend.innerHTML = PECAS.map(p => `<li><button data-n="${p[0]}"><b>${p[0]}</b><span>${p[1]}</span><em>× ${p[2]}</em></button></li>`).join('');
 const slider = document.getElementById('abre'), abreTxt = document.getElementById('abreTxt');
 const numBtn = document.getElementById('numBtn');
+// muda a cada atualização dos modelos: obriga o navegador a baixar os arquivos novos (sem cache antigo)
+const VER = '20261124-3';
 let view = 'braco', showNums = true, auto = false, raf = 0;
 const lerp = (a, b, t) => a + (b - a) * t;
 const ends = document.getElementById('ends'), ctlLbl = document.getElementById('ctlLbl');
@@ -85,7 +87,7 @@ numBtn.addEventListener('click', () => {
 const setView = v => {
   view = v;
   tB.setAttribute('aria-pressed', v === 'braco'); tG.setAttribute('aria-pressed', v === 'garra');
-  mv.src = `models/${v}.glb`; mv.iosSrc = `models/${v}.usdz`; mv.poster = `img/poster_${v}.webp`;
+  mv.src = `models/${v}.glb?v=${VER}`; mv.iosSrc = `models/${v}.usdz?v=${VER}`; mv.poster = `img/poster_${v}.webp`;
   mv.cameraOrbit = v === 'braco' ? '-25deg 70deg auto' : '20deg 75deg auto';
   mv.cameraTarget = 'auto auto auto';
   viewer.classList.toggle('show-hot', v === 'garra' && showNums);
@@ -97,7 +99,9 @@ const setView = v => {
 tB.addEventListener('click', () => setView('braco'));
 tG.addEventListener('click', () => setView('garra'));
 setView(view);
-mv.addEventListener('load', () => { if (auto) { mv.currentTime = 0; startAuto(); } else setManual(slider.value / 100); });
+const onLoad = () => { if (auto) { mv.currentTime = 0; startAuto(); } else setManual(slider.value / 100); };
+mv.addEventListener('load', onLoad);
+if (mv.loaded) onLoad();
 // na realidade aumentada o braço/garra sempre se movem sozinhos
 mv.addEventListener('ar-status', e => { if (e.detail.status === 'session-started') startAuto(); });
 arBtn.addEventListener('click', async () => {
