@@ -1,0 +1,24 @@
+{
+  "name": "garra-pega-pega-ra",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Garra Pega-Pega do braço hidráulico A-81 em 3D e realidade aumentada (Vite).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@google/model-viewer": "^4.4.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "vite": "^8.3.8"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

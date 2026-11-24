@@ -1,0 +1,77 @@
+/* VOICE: folha de instruções de um kit de MDF, prática e calorosa
+   IDEA: a chapa cortada a laser — fundo cor de MDF, bordas queimadas, água azul das seringas
+   PICTURE: o próprio modelo 3D girável, grande, com a garra abrindo e fechando
+   COLOUR and TYPE: MDF claro, marrom de borda queimada, azul da água; Barlow Condensed + Barlow
+   LAYOUT: título curto, visor 3D dominante com painel de controles ao lado, depois peças e passos */
+:root{color-scheme:light dark;
+  --bg:light-dark(#f3ead9,#1c130d);--panel:light-dark(#e8d8bb,#2a1d14);--ink:light-dark(#2a1a10,#f3e6d3);
+  --soft:light-dark(#6b5140,#c9b49c);--edge:light-dark(#5c3a22,#c08a5c);--water:light-dark(#1f6fd1,#6aaeff);--line:light-dark(#d4bf9c,#4a3526)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Condensed",Barlow,sans-serif;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(40px,6vw,64px);font-weight:700}
+h2{font-size:clamp(28px,3.4vw,38px);font-weight:700;margin-bottom:14px}
+h3{font-size:22px;font-weight:600}
+.band{padding:clamp(24px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+header .sub{font-size:18px;color:var(--soft);max-width:62ch;margin:10px 0 0}
+header .course{font-size:14px;color:var(--soft);margin:0 0 10px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:start}
+.viewer{position:relative;border-radius:18px;overflow:hidden;background:
+  radial-gradient(120% 90% at 50% 10%,light-dark(#fbf5ea,#2c1f15),light-dark(#e6d4b5,#160e09));
+  border:2px solid var(--edge);height:min(76vh,680px)}
+model-viewer{width:100%;height:100%;--poster-color:transparent;background:transparent}
+.tabs{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
+.tab{font:600 15px Barlow,sans-serif;min-height:44px;padding:0 16px;border-radius:999px;border:2px solid var(--edge);
+  background:var(--bg);color:var(--ink);cursor:pointer}
+.tab[aria-pressed=true]{background:var(--edge);color:var(--bg)}
+.tab:focus-visible,.btn:focus-visible{outline:3px solid var(--water);outline-offset:2px}
+.hot{display:none;width:26px;height:26px;border-radius:50%;background:var(--edge);color:var(--bg);border:2px solid var(--bg);
+  font:700 13px/1 Barlow,sans-serif;padding:0;box-shadow:0 2px 6px #0004;cursor:pointer}
+.hot.on{background:var(--water);color:#fff;transform:scale(1.25)}
+.show-hot .hot{display:grid;place-items:center}
+.ctl{display:flex;flex-direction:column;gap:6px}
+.ctl label{font-weight:600}
+.ctl .ends{display:flex;justify-content:space-between;font-size:13px;color:var(--soft)}
+input[type=range]{width:100%;height:44px;accent-color:var(--water);margin:0}
+.read{font:700 24px/1.15 "Barlow Condensed",sans-serif;margin:4px 0 0;min-height:2.4em}.read small{display:block;font:600 15px Barlow,sans-serif;color:var(--soft)}
+.legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr;gap:2px}
+.legend button{display:flex;gap:10px;align-items:center;width:100%;min-height:36px;padding:4px 6px;border:0;border-radius:8px;
+  background:transparent;color:var(--ink);font:500 15px Barlow,sans-serif;text-align:left;cursor:pointer}
+.legend button:hover,.legend button.on{background:light-dark(#d9c29d,#3a2a1d)}
+.legend b{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--edge);color:var(--bg);font-size:13px}
+.legend span{flex:1}.legend em{font-style:normal;color:var(--soft);font-size:14px;white-space:nowrap}
+.panel{background:var(--panel);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.btn{font:600 17px Barlow,sans-serif;min-height:52px;border-radius:12px;border:0;cursor:pointer;padding:0 18px;width:100%}
+.ar{background:var(--water);color:#fff;font-size:19px}
+.ghost{background:transparent;color:var(--ink);border:2px solid var(--edge)}
+.msg{font-size:14px;color:var(--soft);margin:-6px 0 0;min-height:1em}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0}
+.nums div{border-top:2px solid var(--line);padding-top:8px}
+.nums div.wide{grid-column:1/-1}
+.nums dt{font-size:13px;color:var(--soft)}
+.nums dd{margin:0;font:700 clamp(24px,3vw,30px)/1.1 "Barlow Condensed",sans-serif;white-space:nowrap}
+.nums dd small{font-size:15px;font-weight:600}
+#qr{display:flex;gap:12px;align-items:center;font-size:14px;color:var(--soft)}
+#qrBox{flex:none;width:104px;height:104px;background:#fff;padding:6px;border-radius:8px}
+#qrBox canvas{display:block;width:92px!important;height:92px!important}
+
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;list-style:none;padding:0;margin:0}
+.steps li{background:var(--panel);border-radius:14px;padding:18px}
+.steps b{display:block;font:700 22px "Barlow Condensed",sans-serif;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;color:var(--soft);font-weight:600}
+td.n{text-align:right;white-space:nowrap;font-weight:600}
+.note{font-size:14px;color:var(--soft);margin-top:10px}
+.how{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
+.how ol{margin:0;padding-left:22px}.how li{margin-bottom:8px}
+footer{border-top:2px solid var(--line);font-size:14px;color:var(--soft)}
+@media(max-width:900px){.stage{grid-template-columns:minmax(0,1fr)}.how{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.steps{grid-template-columns:minmax(0,1fr)}.viewer{height:64vh}#qr{display:none}
+ table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}
+ .stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:7.5em;text-align:start}
+ .stack td::before{content:attr(data-l);float:inline-start;width:7em;margin-inline-start:-7.5em;color:var(--soft);font-weight:400}
+ .stack td:first-child{padding-inline-start:0;font-weight:600;font-size:16px}.stack td:first-child::before{content:none}}
+@media(prefers-reduced-motion:reduce){model-viewer{--progress-bar-color:transparent}}
