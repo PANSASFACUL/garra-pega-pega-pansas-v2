@@ -58,11 +58,15 @@ const follow = () => {
   slider.value = Math.round(s * 100); applyState(s);
   raf = requestAnimationFrame(follow);
 };
+const calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const startAuto = () => {           // anima sozinho (ao abrir a página, ao trocar de vista e na realidade aumentada)
+  auto = true; playBtn.textContent = 'Parar a animação';
+  mv.play(); cancelAnimationFrame(raf); raf = requestAnimationFrame(follow);
+};
 slider.addEventListener('input', () => setManual(slider.value / 100));
 playBtn.addEventListener('click', () => {
   if (auto) { setManual(slider.value / 100); return; }
-  auto = true; playBtn.textContent = 'Parar a animação';
-  mv.currentTime = (slider.value / 100) * dur(); mv.play(); raf = requestAnimationFrame(follow);
+  mv.currentTime = (slider.value / 100) * dur(); startAuto();
 });
 const mark = n => {
   document.querySelectorAll('.hot, .legend button').forEach(e => e.classList.toggle('on', e.dataset.n === String(n)));
@@ -87,14 +91,18 @@ const setView = v => {
   viewer.classList.toggle('show-hot', v === 'garra' && showNums);
   ctlLbl.textContent = v === 'garra' ? 'Pegar o tijolo IGOR' : 'Levar o tijolo de A até B';
   ends.innerHTML = v === 'garra' ? '<span>início</span><span>fim</span>' : '<span>A</span><span>B e de volta a A</span>';
-  auto = false; cancelAnimationFrame(raf); slider.value = 0;
+  cancelAnimationFrame(raf); slider.value = 0;
+  auto = !calmo; playBtn.textContent = auto ? 'Parar a animação' : (v === 'garra' ? 'Pegar o tijolo sozinha' : 'Mover o braço sozinho');
 };
 tB.addEventListener('click', () => setView('braco'));
 tG.addEventListener('click', () => setView('garra'));
 setView(view);
-mv.addEventListener('load', () => { if (auto) mv.play(); else setManual(slider.value / 100); });
+mv.addEventListener('load', () => { if (auto) { mv.currentTime = 0; startAuto(); } else setManual(slider.value / 100); });
+// na realidade aumentada o braço/garra sempre se movem sozinhos
+mv.addEventListener('ar-status', e => { if (e.detail.status === 'session-started') startAuto(); });
 arBtn.addEventListener('click', async () => {
   if (mv.canActivateAR) {
+    startAuto();
     try { await mv.activateAR(); arMsg.textContent = ''; }
     catch (e) { arMsg.textContent = 'Não foi possível abrir a RA neste navegador.'; }
   } else {
